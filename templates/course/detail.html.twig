@@ -4,4 +4,10 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
+
+    <h2>Cours : {{ course.name }}</h2>
+    <p>Description : {{ course.content }}</p>
+    <p>Durée : {{ course.duration }} jours</p>
+    <p>Date de création du cours : {{ course.createdAt | date('d/m/Y H:i') }}</p>
+    <p>Publié : {{ course.isPublished ? 'Oui' : 'Non' }}</p>
 {% endblock %}

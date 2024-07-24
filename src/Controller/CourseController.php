@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Course;
+use App\Repository\CourseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class CourseController extends AbstractController
 {
     #[Route('/', name: 'list')]
-    public function all(): Response
+    public function all(CourseRepository $courseRepository): Response
     {
+        $lastCourses = $courseRepository->findLastCourses();
+
         return $this->render('course/list.html.twig', [
-            'title' => 'Course List',
+            'title' => 'CourseFixtures List',
+            'courses' => $lastCourses
         ]);
     }
 
@@ -24,7 +28,7 @@ class CourseController extends AbstractController
     public function add(): Response
     {
         return $this->render('course/add.html.twig', [
-            'title' => 'Course add',
+            'title' => 'CourseFixtures add',
         ]);
     }
 
@@ -32,7 +36,7 @@ class CourseController extends AbstractController
     public function insert(EntityManagerInterface $em) : Response
     {
         $course = new Course();
-        $course->setName('Course Tailwind')
+        $course->setName('CourseFixtures Tailwind')
             ->setContent('Content Tailwind')
             ->setDuration(2);
         // Etape obligatoire pour l'insertion seulement
@@ -62,13 +66,21 @@ class CourseController extends AbstractController
         return $this->redirectToRoute('app_course_show', ['id' => $course->getId()]);
     }
     #[Route('/{id<\d+>}', name: 'show', methods: ['GET'])]
-    public function detail(int $id, Request $request): Response
+    public function detail(int $id, CourseRepository $courseRepository): Response
     {
-        dump($request);
-        dump($id);
-        // dd($id); // != de dump
+        // find : principalement pour des donnée UNIQUE
+        // $course = $courseRepository->find($id);
+        // findBy : pour des critères multiples (résultats multiples)
+
+        // findOneBy : pour des critères multiples
+        $course = $courseRepository->findOneBy(['id' => $id, 'isPublished' => true]);
+
+        if (!$course) {
+            throw $this->createNotFoundException('Ce cours n\'existe pas !!');
+        }
         return $this->render('course/detail.html.twig', [
-            'title' => 'Course detail',
+            'title' => 'CourseFixtures detail',
+            'course' => $course
         ]);
     }
 
@@ -80,7 +92,7 @@ class CourseController extends AbstractController
         dump($request);
         // dd($id); // != de dump
         return $this->render('course/edit.html.twig', [
-            'title' => 'Course edit',
+            'title' => 'CourseFixtures edit',
         ]);
     }
 }

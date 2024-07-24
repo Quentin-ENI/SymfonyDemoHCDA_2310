@@ -16,28 +16,26 @@ class CourseRepository extends ServiceEntityRepository
         parent::__construct($registry, Course::class);
     }
 
-    //    /**
-    //     * @return Course[] Returns an array of Course objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findLastCourses(int $duration = 3): array
+    {
+        // DQL
+        //        $em = $this->getEntityManager();
+        //        $dql = "SELECT c
+        //            FROM App\Entity\CourseFixtures c
+        //            WHERE c.duration > :duration
+        //            ORDER BY c.createdAt DESC";
+        //        $q = $em->createQuery($dql);
 
-    //    public function findOneBySomeField($value): ?Course
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // Avec QueryBuilder
+        $queryBuilder = $this->createQueryBuilder('c');
+        $queryBuilder
+            ->where('c.duration > :duration')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setParameter('duration', $duration);
+
+        // Partie Commune au 2 requêtes
+        $q = $queryBuilder->getQuery();
+        return $q->getResult();
+    }
+
 }
