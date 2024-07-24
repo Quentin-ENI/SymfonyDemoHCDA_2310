@@ -1,5 +1,5 @@
 ###> phpstorm ###
-.idea/
+.idea/:q
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
