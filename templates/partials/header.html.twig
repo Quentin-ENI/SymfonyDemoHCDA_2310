@@ -1,15 +1,21 @@
-<header class="text-gray-600 body-font">
-    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a href="/" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span class="ml-3 text-xl">Tailblocks</span>
-        </a>
-        <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
-            <a href="{{ path('app_test') }}" class="mr-5 hover:text-gray-900">Test</a>
-            <a  href="{{ path('app_course_list') }}" class="mr-5 hover:text-gray-900">Courses</a>
-            <a  href="{{ path('app_course_add') }}" class="mr-5 hover:text-gray-900">Add Course</a>
-        </nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Demo Course</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ path('app_test') }}" class="nav-link active" aria-current="page">Test</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_course_list') }}" class="nav-link">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_course_add') }}" class="nav-link">Add Course</a>
+                </li>
+            </ul>
+        </div>
     </div>
-</header>
+</nav>

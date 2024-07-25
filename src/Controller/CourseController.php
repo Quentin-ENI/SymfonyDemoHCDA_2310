@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Course;
+use App\Form\CourseType;
 use App\Repository\CourseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,19 +17,30 @@ class CourseController extends AbstractController
     #[Route('/', name: 'list')]
     public function all(CourseRepository $courseRepository): Response
     {
-        $lastCourses = $courseRepository->findLastCourses();
-
         return $this->render('course/list.html.twig', [
             'title' => 'CourseFixtures List',
-            'courses' => $lastCourses
+            'courses' => $courseRepository->findLastCourses(4)
         ]);
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
-    public function add(): Response
+    public function add(Request $request, EntityManagerInterface $em): Response
     {
+        $course = new Course();
+        $courseForm = $this->createForm(CourseType::class, $course);
+
+        $courseForm->handleRequest($request);
+        // Test de soumission et de validation
+        if ($courseForm->isSubmitted() && $courseForm->isValid()) {
+            $em->persist($course);
+            $em->flush();
+            $this->addFlash('success', 'Cours ajoute avec succes !!');
+            return $this->redirectToRoute('app_course_list');
+        }
+
         return $this->render('course/add.html.twig', [
             'title' => 'CourseFixtures add',
+            'formCourse' => $courseForm
         ]);
     }
 

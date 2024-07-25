@@ -4,6 +4,7 @@
     <option name="directories">
       <list>
         <option value="$PROJECT_DIR$/tests" />
+        <option value="$PROJECT_DIR$/../bucket_sf/tests" />
       </list>
     </option>
   </component>

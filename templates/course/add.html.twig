@@ -4,4 +4,13 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
+{#    Avec Submit button depuis le FormType#}
+    {{ form(formCourse) }}
+
+
+{#    Sans Submit button depuis le FormType #}
+{#    {{ form_start(formCourse) }}#}
+{#        {{ form_widget(formCourse) }}#}
+{#        <button>Créer le cours</button>#}
+{#    {{ form_end(formCourse) }}#}
 {% endblock %}
