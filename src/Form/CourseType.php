@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class CourseType extends AbstractType
 {
@@ -30,6 +31,7 @@ class CourseType extends AbstractType
                 'label' => "Cours publie ?",
                 'required' => false,
             ])
+            ->add('thumbnailFile', FileType::class)
             ->add('addCourse', SubmitType::class, [
                 'label' => "Ajouter un cours",
                 'attr' => [
@@ -37,6 +39,23 @@ class CourseType extends AbstractType
                 ]
             ])
         ;
+
+        /* Sans VichUploaderBundle
+        ->add('thumbnailFile', FileType::class, [
+            'label' => "Miniature du cours",
+            'mapped' => false,
+            'required' => false,
+            'constraints' => [
+                new Image([
+                    'maxSize' => '1024k',
+                    'mimeTypes' => [
+                        'image/jpg',
+                        'image/png',
+                    ],
+                    'mimeTypesMessage' => 'Veuillez uploader une image au format jpg ou png',
+                ])
+            ],
+        ])*/
     }
 
     public function configureOptions(OptionsResolver $resolver): void

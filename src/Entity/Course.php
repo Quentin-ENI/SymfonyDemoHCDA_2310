@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\CourseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
+#[Vich\Uploadable]
 class Course
 {
     #[ORM\Id]
@@ -39,6 +42,16 @@ class Course
 
     #[ORM\Column(options: ['default' => false])]
     private ?bool $published = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $thumbnail = null;
+
+    #[Vich\UploadableField(mapping: 'courses', fileNameProperty: 'thumbnail')]
+    #[Assert\File(mimeTypes: ['image/jpeg', 'image/png'])]
+    private ?File $thumbnailFile = null;
+
+    #[ORM\ManyToOne(inversedBy: 'courses')]
+    private ?Category $category = null;
 
     public function __construct()
     {
@@ -119,6 +132,41 @@ class Course
     public function setPublished(bool $published): static
     {
         $this->published = $published;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $thumbnail): static
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getThumbnailFile(): ?File
+    {
+        return $this->thumbnailFile;
+    }
+
+    public function setThumbnailFile(?File $thumbnailFile): static
+    {
+        $this->thumbnailFile = $thumbnailFile;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
