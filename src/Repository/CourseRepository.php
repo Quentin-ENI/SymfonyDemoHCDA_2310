@@ -16,7 +16,7 @@ class CourseRepository extends ServiceEntityRepository
         parent::__construct($registry, Course::class);
     }
 
-    public function findLastCourses(int $duration = 3): array
+    public function findLastCoursesFilteredByDuration(int $duration = 3): array
     {
         // DQL
         //        $em = $this->getEntityManager();

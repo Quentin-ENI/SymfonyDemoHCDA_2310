@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Course;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class CourseFixtures extends Fixture
+class CourseFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -16,19 +17,23 @@ class CourseFixtures extends Fixture
         $course1 = new Course();
         $course1->setName('Course Fixtures')
             ->setContent('Content Fixtures')
-            ->setDuration(1);
+            ->setDuration(1)
+            ->addCategory($this->getReference("category-1"));
         $course2 = new Course();
         $course2->setName('Course Doctrine')
             ->setContent('Content Doctrine')
-            ->setDuration(7);
+            ->setDuration(7)
+            ->addCategory($this->getReference("category-2"));
         $course3 = new Course();
         $course3->setName('Course QueryBuilder')
             ->setContent('Content QueryBuilder')
-            ->setDuration(2);
+            ->setDuration(2)
+            ->addCategory($this->getReference("category-1"));
         $course4 = new Course();
         $course4->setName('Course Faker')
             ->setContent('Content Faker')
-            ->setDuration(10);
+            ->setDuration(10)
+            ->addCategory($this->getReference("category-2"));
 
         // Persistences
         $manager->persist($course1);
@@ -51,5 +56,12 @@ class CourseFixtures extends Fixture
 
         // Executer l'insertion
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            CategoryFixtures::class
+        ];
     }
 }

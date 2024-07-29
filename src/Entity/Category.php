@@ -21,7 +21,7 @@ class Category
     /**
      * @var Collection<int, Course>
      */
-    #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'category')]
+    #[ORM\ManyToMany(targetEntity: Course::class, mappedBy: 'categories')]
     private Collection $courses;
 
     public function __construct()
@@ -58,7 +58,7 @@ class Category
     {
         if (!$this->courses->contains($course)) {
             $this->courses->add($course);
-            $course->setCategory($this);
+            $course->addCategory($this);
         }
 
         return $this;
@@ -67,12 +67,10 @@ class Category
     public function removeCourse(Course $course): static
     {
         if ($this->courses->removeElement($course)) {
-            // set the owning side to null (unless already changed)
-            if ($course->getCategory() === $this) {
-                $course->setCategory(null);
-            }
+            $course->removeCategory($this);
         }
 
         return $this;
     }
+
 }

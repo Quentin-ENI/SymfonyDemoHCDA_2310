@@ -19,7 +19,7 @@ class CourseController extends AbstractController
     {
         return $this->render('course/list.html.twig', [
             'title' => 'CourseFixtures List',
-            'courses' => $courseRepository->findLastCourses(4)
+            'courses' => $courseRepository->findLastCoursesFilteredByDuration(4)
         ]);
     }
 

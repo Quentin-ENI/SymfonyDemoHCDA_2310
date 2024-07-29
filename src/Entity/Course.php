@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CourseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -50,13 +52,17 @@ class Course
     #[Assert\File(mimeTypes: ['image/jpeg', 'image/png'])]
     private ?File $thumbnailFile = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courses')]
-    private ?Category $category = null;
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'courses')]
+    private Collection $categories;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->published = false;
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,14 +165,26 @@ class Course
         return $this;
     }
 
-    public function getCategory(): ?Category
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
-        return $this->category;
+        return $this->categories;
     }
 
-    public function setCategory(?Category $category): static
+    public function addCategory(Category $category): static
     {
-        $this->category = $category;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }

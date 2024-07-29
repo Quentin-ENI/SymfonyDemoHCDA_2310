@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Course;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -31,7 +33,17 @@ class CourseType extends AbstractType
                 'label' => "Cours publie ?",
                 'required' => false,
             ])
-            ->add('thumbnailFile', FileType::class)
+            ->add(
+                'categories',
+                EntityType::class,
+                [
+                    'class' => Category::class,
+                    'choice_label' => 'name',
+                    'placeholder' => 'Sélectionnez une catégorie',
+                    'multiple' => true
+                ]
+            )
+//            ->add('thumbnailFile', FileType::class)
             ->add('addCourse', SubmitType::class, [
                 'label' => "Ajouter un cours",
                 'attr' => [

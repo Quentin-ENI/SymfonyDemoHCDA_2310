@@ -4,5 +4,12 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
-    {{ dump(courses) }}
+    {% for course in courses %}
+        <p>Nom de la leçon: {{ course.name }}</p>
+        <ul>
+            {% for category in course.categories %}
+                <li>{{ category.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
 {% endblock %}
