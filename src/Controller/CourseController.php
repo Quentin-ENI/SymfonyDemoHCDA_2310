@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/course', name: 'app_course_')]
 class CourseController extends AbstractController
@@ -24,10 +25,16 @@ class CourseController extends AbstractController
     }
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_ADMIN")]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
         $course = new Course();
         $courseForm = $this->createForm(CourseType::class, $course);
+
+        dump($this->getUser());
+
+        $isSuperAdmin = $this->isGranted("ROLE_SUPER_ADMIN");
+        dump($isSuperAdmin);
 
         $courseForm->handleRequest($request);
         // Test de soumission et de validation

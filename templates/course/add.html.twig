@@ -5,6 +5,10 @@
 {% block body %}
     <h1>{{ title }}</h1>
 {#    Avec Submit button depuis le FormType#}
+    {%  if app.user %}
+        <p>{{ app.user.email }}</p>
+    {% endif %}
+
     {{ form(formCourse) }}
 
 
