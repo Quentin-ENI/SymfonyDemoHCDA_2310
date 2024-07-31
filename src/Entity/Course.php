@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -18,6 +19,7 @@ class Course
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['getCourses', 'getCourse'])]
     private ?int $id = null;
 
     #[ORM\Column(name: 'label', length: 255)]
@@ -26,26 +28,33 @@ class Course
         minMessage: 'Le nom du cours doit contenir au moins 3 caractères',
         maxMessage: 'Le nom du cours ne doit pas contenir plus de 255 caractères')
     ]
+    #[Groups(['getCourses', 'getCourse'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['getCourses', 'getCourse'])]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
     #[Assert\NotBlank(message: 'La durée du cours doit être rempli')]
     #[Assert\Positive(message: 'La durée du cours doit être un entier positif')]
+    #[Groups(['getCourses', 'getCourse'])]
     private ?int $duration = null;
 
     #[ORM\Column]
+    #[Groups(['getCourses', 'getCourse'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['getCourses', 'getCourse'])]
     private ?\DateTimeImmutable $modifiedAt = null;
 
     #[ORM\Column(options: ['default' => false])]
+    #[Groups(['getCourse'])]
     private ?bool $published = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['getCourse'])]
     private ?string $thumbnail = null;
 
     #[Vich\UploadableField(mapping: 'courses', fileNameProperty: 'thumbnail')]
@@ -56,6 +65,7 @@ class Course
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'courses')]
+    #[Groups(['getCourse'])]
     private Collection $categories;
 
     public function __construct()
