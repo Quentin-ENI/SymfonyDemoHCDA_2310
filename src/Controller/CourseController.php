@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Course;
 use App\Form\CourseType;
 use App\Repository\CourseRepository;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,11 @@ class CourseController extends AbstractController
 
     #[Route('/add', name: 'add', methods: ['GET', 'POST'])]
     #[IsGranted("ROLE_ADMIN")]
-    public function add(Request $request, EntityManagerInterface $em): Response
+    public function add(
+        Request $request,
+        EntityManagerInterface $em,
+        NotificationService $notificationService
+    ): Response
     {
         $course = new Course();
         $courseForm = $this->createForm(CourseType::class, $course);
@@ -35,6 +40,8 @@ class CourseController extends AbstractController
 
         $isSuperAdmin = $this->isGranted("ROLE_SUPER_ADMIN");
         dump($isSuperAdmin);
+
+        $notificationService->sendMail($this->getUser());
 
         $courseForm->handleRequest($request);
         // Test de soumission et de validation
