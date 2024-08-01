@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello JokeController!{% endblock %}
+
+{% block body %}
+<div>
+    <h1>Une blague Chuck Norris</h1>
+    <img src="{{ joke.iconUrl }}" alt="Image de blague">
+    <p>{{ joke.value }}</p>
+</div>
+{% endblock %}

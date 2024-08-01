@@ -2,6 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +21,16 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[Vich\Uploadable]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => ['getCourse']]),
+        new GetCollection(normalizationContext: ['groups' => ['getCourses']]),
+        new Post(denormalizationContext: ['groups' => ['postCourse']]),
+        new Put(),
+        new Patch(),
+        new Delete()
+    ],
+)]
 class Course
 {
     #[ORM\Id]
@@ -28,7 +45,7 @@ class Course
         minMessage: 'Le nom du cours doit contenir au moins 3 caractères',
         maxMessage: 'Le nom du cours ne doit pas contenir plus de 255 caractères')
     ]
-    #[Groups(['getCourses', 'getCourse'])]
+    #[Groups(['getCourses', 'getCourse', 'postCourse'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
