@@ -215,4 +215,12 @@ class Course
 
         return $this;
     }
+
+    public function getFormattedCreatedAt(int $choiceFormat): string {
+        if ($choiceFormat === 0) {
+            return $this->createdAt->format("d-M-Y");
+        }
+
+        return $this->createdAt->format("d-m-Y");
+    }
 }
